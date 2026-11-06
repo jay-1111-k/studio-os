@@ -1,0 +1,32 @@
+services:
+  studio:
+    build:
+      context: .
+      dockerfile: Dockerfile.production
+    expose:
+      - "3000"
+    volumes:
+      - studio-data:/app/data
+      - /var/backups/studio-os:/backups
+    env_file:
+      - .env
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:2.10-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      - studio
+    restart: unless-stopped
+
+volumes:
+  studio-data:
+  caddy-data:
+  caddy-config:
