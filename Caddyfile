@@ -1,4 +1,4 @@
-studioos.kilofox.com {
+{$SITE_HOSTNAME} {
 	encode zstd gzip
 
 	header {
